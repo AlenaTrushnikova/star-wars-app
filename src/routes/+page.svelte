@@ -5,7 +5,7 @@
   
     let planets: Planet [] = [];
     let next: string | null = null;
-    let selectedPlanetId: number | null = null; // Use just the ID to track the selected planet
+    let selectedPlanetId: number | null | undefined = null; // Use just the ID to track the selected planet
     let isLoadingResidents: boolean = false;
     let isDeletePlanetsDB: boolean = false;
   
@@ -28,11 +28,7 @@
             return;
         }
 
-        console.log('Planet', planet);
-        console.log('Planet Id', planet.id);
         selectedPlanetId = planet.id; // Update the selected planet ID
-
-        console.log("selectedPlanetId", selectedPlanetId);
 
         // Proceed to fetch residents only if they haven't been loaded yet
         if (planet.residentsNames === null || planet.residentsNames.length === 0) {
@@ -45,15 +41,11 @@
                 new Promise(resolve => setTimeout(resolve, 1000)) // 1-second delay
             ]);
 
-            console.log('Updated planet with residents', updatedPlanet);
-
             planets = planets.map(p => p.id === planet.id ? { ...p, ...updatedPlanet } : p);
             isLoadingResidents = false;
         }
         // This is crucial: explicitly trigger a reactivity update
         planets = planets.slice();
-
-        console.log(planets);
     }
 
     async function deletePlanetsDB() {
@@ -74,24 +66,11 @@
 
     onMount(() => {
       initPlanets();
-      console.log(selectedPlanetId)
     });
 </script>
 
 <style>
-    .planet-button {
-      background: none;
-      border: none;
-      color: inherit;
-      text-align: left;
-      width: 30%;
-      padding: 0; 
-      font: inherit; 
-    }
-    .planet-button:hover, .planet-button:focus {
-      background-color: #ffec19; 
-      outline: none;
-    }
+    @import '../style/styles.css';
 </style>
 
 <main>
@@ -122,14 +101,14 @@
         {/each}
     </ol>
     {#if next}
-      <button on:click="{loadPlanets}">Load More Planets</button>
+      <button on:click="{loadPlanets}">LOAD MORE PLANETS</button>
     {/if}
 
     <button on:click={deletePlanetsDB} disabled={isDeletePlanetsDB}>
         {#if isDeletePlanetsDB}
         Deleting Data...
         {:else}
-        Reset Universe
+        RESET UNIVERSE
         {/if}
     </button>
 </main>
