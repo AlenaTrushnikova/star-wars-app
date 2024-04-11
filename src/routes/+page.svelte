@@ -6,6 +6,7 @@
     let planets: Planet [] = [];
     let next: string | null = null;
     let selectedPlanetId: number | null = null; // Use just the ID to track the selected planet
+    let isLoadingResidents = false;
   
     async function loadPlanets() {
         const { planets: newPlanets, next: newNext } = await planetsStore.fetchAndStorePlanets();
@@ -19,23 +20,39 @@
     }
 
     async function selectPlanet(planet: Planet) {
+        // Toggle planet selection off if it's already selected
+        if (selectedPlanetId === planet.id) {
+            selectedPlanetId = null;
+            // No need to proceed further as we're just deselecting the current planet
+            return;
+        }
+
         console.log('Planet', planet);
         console.log('Planet Id', planet.id);
         selectedPlanetId = planet.id; // Update the selected planet ID
 
-        console.log("selectedPlanetId", selectedPlanetId)
+        console.log("selectedPlanetId", selectedPlanetId);
 
+        // Proceed to fetch residents only if they haven't been loaded yet
         if (planet.residentsNames === null || planet.residentsNames.length === 0) {
-            const updatedPlanet = await planetsStore.fetchAndStoreResidentsNames(planet.id);
-            // No need to set selectedPlanet here since we're tracking by ID
+            isLoadingResidents = true; 
+
+            // Fetch and display the residents with at least a 1-second delay for the loading indicator
+            const updatedPlanetPromise = planetsStore.fetchAndStoreResidentsNames(planet.id);
+            const [updatedPlanet] = await Promise.all([
+                updatedPlanetPromise,
+                new Promise(resolve => setTimeout(resolve, 1000)) // 1-second delay
+            ]);
+
             console.log('Updated planet with residents', updatedPlanet);
 
             planets = planets.map(p => p.id === planet.id ? { ...p, ...updatedPlanet } : p);
+            isLoadingResidents = false;
         }
         // This is crucial: explicitly trigger a reactivity update
         planets = planets.slice();
 
-        console.log(planets)
+        console.log(planets);
     }
 
     onMount(() => {
@@ -69,7 +86,10 @@
                     {planet.name}
                 </button>
             </li>
-                {#if selectedPlanetId === planet.id}
+            {#if selectedPlanetId === planet.id}
+                {#if isLoadingResidents}
+                    <p>Loading residents...</p>
+                {:else}
                     {#if planet.residentsNames && planet.residentsNames.length > 0}
                         <ul>
                             {#each planet.residentsNames as residentName}
@@ -77,9 +97,10 @@
                             {/each}
                         </ul>
                     {:else}
-                        <ul><li>No residents</li></ul>
+                        <p>No residents</p>
                     {/if}
                 {/if}
+            {/if}
         {/each}
     </ol>
     {#if next}
