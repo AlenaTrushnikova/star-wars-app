@@ -107,7 +107,6 @@ async function fetchAndStoreResidentsNames(planetId) {
     return dbPlanet;
 }
 
-
 /**
  * Fetches names of residents from their URLs.
  * @param residentsUrls Array of URLs pointing to resident details.
@@ -135,8 +134,6 @@ async function fetchResidentNames(residentsUrls: string[]): Promise<string[]> {
     }
 }
 
-  
-  
 // Helper function to store planets in IndexedDB
 async function storePlanets(planetsWithResidents) {
     const tx = db.transaction(['planets'], 'readwrite');
@@ -168,7 +165,6 @@ async function updateNext(next) {
     await tx.complete;
 }
   
-  
 async function getPlanets() {
     await openDB();
     return new Promise((resolve, reject) => {
@@ -193,8 +189,6 @@ async function getPlanets() {
     });
 }
 
-  
-
 async function getNext() {
     await openDB();
     return new Promise<string | null>((resolve, reject) => {
@@ -214,6 +208,7 @@ async function getNext() {
 
 async function deletePlanetsDB(): Promise<void> {
     await indexedDB.deleteDatabase(dbName);
+    window.location.reload();
 }  
 
 export const planetsStore = {

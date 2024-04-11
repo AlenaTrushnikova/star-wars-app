@@ -6,7 +6,8 @@
     let planets: Planet [] = [];
     let next: string | null = null;
     let selectedPlanetId: number | null = null; // Use just the ID to track the selected planet
-    let isLoadingResidents = false;
+    let isLoadingResidents: boolean = false;
+    let isDeletePlanetsDB: boolean = false;
   
     async function loadPlanets() {
         const { planets: newPlanets, next: newNext } = await planetsStore.fetchAndStorePlanets();
@@ -55,6 +56,22 @@
         console.log(planets);
     }
 
+    async function deletePlanetsDB() {
+        const confirmed = confirm("Are you sure you want to reset all data? This action cannot be undone.");
+        if (confirmed) {
+            isDeletePlanetsDB = true;
+            try {
+                await planetsStore.deletePlanetsDB();
+                window.location.reload();
+            } catch (error) {
+                console.error("Failed to delete the database:", error);
+                alert("Error deleting data. Please try again.");
+            } finally {
+                isDeletePlanetsDB = false;
+            }
+        }
+    }
+
     onMount(() => {
       initPlanets();
       console.log(selectedPlanetId)
@@ -79,6 +96,7 @@
 
 <main>
     <h1>Welcome to the Star Wars Universe!</h1>
+    <h2>Explore the Planets</h2>
     <ol>
         {#each planets as planet}
             <li>
@@ -104,9 +122,14 @@
         {/each}
     </ol>
     {#if next}
-      <button on:click="{loadPlanets}">Load More</button>
+      <button on:click="{loadPlanets}">Load More Planets</button>
     {/if}
 
-    <button on:click={planetsStore.deletePlanetsDB}>Clear Data</button>
+    <button on:click={deletePlanetsDB} disabled={isDeletePlanetsDB}>
+        {#if isDeletePlanetsDB}
+        Deleting Data...
+        {:else}
+        Reset Universe
+        {/if}
+    </button>
 </main>
-
