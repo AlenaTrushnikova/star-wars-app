@@ -11,7 +11,7 @@ This web application lets you explore planets from the Star Wars universe. Built
 ## Setup
 
 1. **Clone the repository:**
-`git clone https://vercel.com/alenas-projects-b3cbef28/star-wars-app`
+`git clone git@github.com:AlenaTrushnikova/star-wars-app.git`
 
 2. **Install dependencies:**
 `npm install`
