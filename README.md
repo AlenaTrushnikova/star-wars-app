@@ -1,38 +1,26 @@
-# create-svelte
+# Star Wars Universe Explorer
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+This web application lets you explore planets from the Star Wars universe. Built with **Svelte** and **TypeScript**, it utilizes **IndexedDB** and integrates the [SWAPI](https://swapi.dev/) for dynamic data fetching.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Interactive Planet List:** Browse and select planets to view details and residents.
+- **Dynamic Loading:** Load more planets as needed.
+- **Efficient Data Management:** Uses IndexedDB for local data storage to minimize API calls.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Setup
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+1. **Clone the repository:**
+`git clone https://vercel.com/alenas-projects-b3cbef28/star-wars-app`
 
-## Developing
+2. **Install dependencies:**
+`npm install`
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+3. **Run locally:**
+`npm run dev`
 
-```bash
-npm run dev
+Access the app via [http://localhost:5173](http://localhost:5173).
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Deployment
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Visit the live application here: [Star Wars Universe Explorer](https://vercel.com/alenas-projects-b3cbef28/star-wars-app).
